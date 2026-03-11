@@ -35,10 +35,6 @@
       ]
     },
     {
-      "name": "Sprint backlog",
-      "cards": []
-    },
-    {
       "name": "Buggar",
       "cards": [
         {
@@ -66,6 +62,10 @@
           "desc": "Knappen för att gå tillbaka till startsidan från playerinfo fungerar inte alltid som förväntat."
         }
       ]
+    },
+    {
+      "name": "Sprint backlog",
+      "cards": []
     },
     {
       "name": "In Progress",
