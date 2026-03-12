@@ -86,7 +86,7 @@ function removePlayer(team, username) {
 }
 
 function usernameExists(username) {
-    return teamA.includes(username) || teamB.includes(username)
+    return teamA.some(p => p.username === username) || teamB.some(p => p.username === username);
 }
 
 
@@ -95,23 +95,23 @@ function renderAddPlayer() {
     const teamSelect = document.getElementById("teamSelect")
 
     teamSelect.innerHTML = `
+    <option value="A" ${teamA.length >= 5 ? "disabled" : ""}>
+    ${teamAName}
+    </option>
 
-<option value="A" ${teamA.length >= 5 ? "disabled" : ""}>
-${teamAName}
-</option>
-
-<option value="B" ${teamB.length >= 5 ? "disabled" : ""}>
-${teamBName}
-</option>
-
-`
+    <option value="B" ${teamB.length >= 5 ? "disabled" : ""}>
+    ${teamBName}
+    </option>
+    `
 
     document.getElementById("playerForm").addEventListener("submit", e => {
 
         e.preventDefault()
         const username = document.getElementById("username").value
-        if (usernameExists) {
-            document.getElementById("error").textContent = "Username already exists"
+
+        if (usernameExists(username)) {
+            document.getElementById("error").textContent = "Username already exists";
+            return;
         }
         const player = {
             username,
@@ -123,12 +123,14 @@ ${teamBName}
 
         }
         const team = document.getElementById("teamSelect").value
+
         if (team === "A") {
             teamA.push(player)
         }
         if (team === "B") {
             teamB.push(player)
         }
+
         save()
         window.location.href = "index.html"
 
