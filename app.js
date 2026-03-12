@@ -85,8 +85,15 @@ function removePlayer(team, username) {
 
 }
 
-function usernameExists(username) {
-    return teamA.some(p => p.username === username) || teamB.some(p => p.username === username);
+function usernameExists(username, ignoreUsername = 0) {
+    if(ignoreUsername !== "" && username === ignoreUsername){
+        return false;
+    }
+
+    const existsInA = teamA.some(p => p.username === username);
+    const existsInB = teamB.some(p => p.username === username);
+
+    return existsInA || existsInB;
 }
 
 
@@ -162,4 +169,48 @@ Back
 
 `
 
+}
+
+function toggleEdit(show){
+    const container = document.getElementById("editFormContainer");
+    container.style.display = show ? "block" : "none";
+    if(show){
+        const username = localStorage.getItem("selectedPlayer");
+        const player = teamA.find(p => p.username === username) || teamB.find(p => p.username === username)
+
+        document.getElementById("editUsername").value = player.username;
+        document.getElementById("editFirstname").value = player.firstname;
+        document.getElementById("editLastname").value = player.lastname;
+        document.getElementById("editAge").value = player.age;
+        document.getElementById("editCountry").value = player.country;
+        document.getElementById("editRanking").value = player.ranking;
+    }
+}
+
+function saveEdit(){
+    const oldUsername = localStorage.getItem("selectedPlayer");
+    const newUsername = document.getElementById("editUsername").value
+
+    if(usernameExists(newUsername, oldUsername)){
+        alert("This username is already taken by another player!")
+    }
+
+    const player = teamA.find(p => p.username === oldUsername) || teamB.find(p => p.username === oldUsername);
+    
+
+    if(player){
+
+        player.username = newUsername;
+        player.firstname = document.getElementById("editFirstname").value;
+        player.lastname = document.getElementById("editLastname").value;
+        player.age = document.getElementById("editAge").value;
+        player.country = document.getElementById("editCountry").value;
+        player.ranking = document.getElementById("editRanking").value;
+
+        localStorage.setItem("selectedPlayer", newUsername);
+
+        save();
+        renderPlayerInfo();
+        toggleEdit(false);
+    }
 }

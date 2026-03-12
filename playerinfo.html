@@ -14,7 +14,8 @@
     </nav>
     <div id="profile"></div>
 
-    <button type="button">Edit Player Information</button>
+    <button type="button" onclick="toggleEdit(true)">Edit Player Information</button> 
+    <br> <br>
 
     <div id="editFormContainer" style="display: none;">
         <form id="editPlayerForm">
@@ -31,8 +32,8 @@
                 <option>Diamond</option>
             </select>
             <br><br>
-            <button type="button" id="save">Save Changes</button>
-            <button type="button" id="" onclick="">Cancel</button>
+            <button type="button" id="saveChanges" onclick="saveEdit()">Save Changes</button>
+            <button type="button" id="cancelChanges" onclick="toggleEdit(false)">Cancel</button>
         </form>
     </div>
     
