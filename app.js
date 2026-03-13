@@ -48,6 +48,9 @@ function renderHome() {
 <button onclick="removePlayer('A','${p.username}')">
 Remove
 </button>
+<button onclick="movePlayer('A','${p.username}')">
+Switch team
+</button>
 
 `
         listA.appendChild(li)
@@ -59,6 +62,9 @@ Remove
 <span onclick="goToPlayer('${p.username}')">${p.username}</span>
 <button onclick="removePlayer('B','${p.username}')">
 Remove
+</button>
+<button onclick="movePlayer('B','${p.username}')">
+Switch team
 </button>
 
 `
@@ -82,7 +88,35 @@ function removePlayer(team, username) {
     }
     save()
     renderHome()
+}
 
+function movePlayer(fromTeam, username) {
+    let player;
+
+    if(fromTeam === "A") {
+        player = teamA.find(p => p.username === username);
+
+        if(!player) return;
+        if(teamB.length >= 5) {
+            alert(`${teamBName} is full!`);
+            return;
+        }
+        teamA = teamA.filter(p => p.username !== username);
+        teamB.push(player);
+    }
+    if(fromTeam === "B") {
+        player = teamB.find(p => p.username === username);
+
+        if(!player) return;
+        if(teamA.length >= 5) {
+            alert(`${teamBName} is full!`)
+            return;
+        }
+        teamB = teamB.filter(p => p.username !== username);
+        teamA.push(player);
+    }
+    save();
+    renderHome();
 }
 
 function usernameExists(username, ignoreUsername = 0) {
