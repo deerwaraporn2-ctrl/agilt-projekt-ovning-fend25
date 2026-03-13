@@ -4,6 +4,9 @@ let teamB = JSON.parse(localStorage.getItem("teamB")) || []
 let teamAName = localStorage.getItem("teamAName") || "Team A"
 let teamBName = localStorage.getItem("teamBName") || "Team B"
 
+const searchInput = document.getElementById("searchInput")
+const searchBtn = document.getElementById("searchBtn")
+
 
 function save() {
 
@@ -73,6 +76,38 @@ Switch team
 
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+
+    const searchInput = document.getElementById("searchInput")
+    const searchBtn = document.getElementById("searchBtn")
+
+    function searchPlayers() {
+
+        const text = searchInput.value.toLowerCase()
+        const players = document.querySelectorAll(".player")
+
+        players.forEach(player => {
+
+            const name = player.textContent.toLowerCase()
+
+            if (name.includes(text)) {
+                player.style.display = ""
+            } else {
+                player.style.display = "none"
+            }
+
+        })
+    }
+
+    searchBtn.addEventListener("click", searchPlayers)
+
+    searchInput.addEventListener("keyup", function(e) {
+        if (e.key === "Enter") {
+            searchPlayers()
+        }
+    })
+
+})
 
 function goToPlayer(username) {
     localStorage.setItem("selectedPlayer", username)

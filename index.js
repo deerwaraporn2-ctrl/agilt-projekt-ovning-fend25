@@ -108,3 +108,4 @@ function changeTeamName() {
 
 addPlayerBtn.addEventListener("click", addPlayer)
 changeNameBtn.addEventListener("click", changeTeamName)
+
