@@ -106,8 +106,50 @@ function renderHome() {
             listB.appendChild(li)
         }
     })
-
+updateTeamStats()
 }
+
+function rankToNumber(rank) {
+    const map = {
+        Iron: 1,
+        Bronze: 2,
+        Silver: 3,
+        Gold: 4,
+        Diamond: 5
+    }
+    return map[rank] || 0
+}
+function numberToRank(num) {
+    const ranks = ["Iron", "Bronze", "Silver", "Gold", "Diamond"]
+    return ranks[Math.round(num) - 1] || "-"
+}
+
+function updateTeamStats() {
+
+    function calcStats(team) {
+        const count = team.length
+
+        const avgAge = count === 0
+            ? 0
+            : Math.floor(team.reduce((sum, p) => sum + Number(p.age || 0), 0) / count)
+
+        const avgRank = count === 0
+            ? 0
+            : Math.floor(team.reduce((sum, p) => sum + rankToNumber(p.ranking), 0) / count)
+
+        return { count, avgAge, avgRank }
+    }
+
+    const statsA = calcStats(teamA)
+    const statsB = calcStats(teamB)
+
+    document.getElementById("teamAStats").textContent =
+        `Players: ${statsA.count} | Avg Age: ${statsA.avgAge} | Avg Rank: ${numberToRank(statsA.avgRank)}`
+
+    document.getElementById("teamBStats").textContent =
+        `Players: ${statsB.count} | Avg Age: ${statsB.avgAge} | Avg Rank: ${numberToRank(statsB.avgRank)}`
+}
+
 
 async function loadCountries() {
     const countrySelect = document.getElementById("country");
@@ -339,6 +381,7 @@ function saveEdit(){
 
         save();
         renderPlayerInfo();
+        updateTeamStats();
         toggleEdit(false);
     }
 }
