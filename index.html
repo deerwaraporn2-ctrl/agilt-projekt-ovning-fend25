@@ -25,10 +25,37 @@
         <button onclick="renameTeam('B')">Rename</button>
 
     </div>
-
+    
+    <br>
+    
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search player">
         <button id="searchBtn">Search</button>
+        
+        <span>&nbsp; Age: </span>
+        <select name="ageFilter" id="ageFilter">
+            <option value="" >...</option>
+            <option value="under-13"> < 13 </option>
+            <option value="13-15">13-15</option>
+            <option value="16-17">16-17</option>
+            <option value="18-24">18-24</option>
+            <option value="25-30">25-30</option>
+            <option value="31-39">31-39</option>
+            <option value="40-54">40-54</option>
+            <option value="55+">55+</option>
+        </select>
+
+        <span>&nbsp; Rank </span>
+        <select name="rankFilter" id="rankFilter">
+            <option value="" >...</option>
+            <option>Iron</option>
+            <option>Bronze</option>
+            <option>Silver</option>
+            <option>Gold</option>
+            <option>Diamond</option>
+        </select>
+        &nbsp;
+        <button type="button" id="filterBtn">Filter</button>
     </div>
 
     <div class="teams">

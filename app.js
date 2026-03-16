@@ -7,6 +7,21 @@ let teamBName = localStorage.getItem("teamBName") || "Team B"
 const searchInput = document.getElementById("searchInput")
 const searchBtn = document.getElementById("searchBtn")
 
+function ageMatches(playerAge, range){
+    if(!range || range === ""){
+        return true;
+    }
+
+    const age = parseInt(playerAge);
+    
+    if(range === "under-13") return age < 13;
+    if(range === "55+") return age >= 55;
+
+    const [min,max] = range.split("-").map(Number);
+    return age >= min && age <= max;
+}
+
+
 
 function save() {
 
@@ -35,6 +50,11 @@ function renameTeam(team) {
 
 
 function renderHome() {
+
+    const searchTerm = document.getElementById("searchInput").value;
+    const ageRange = document.getElementById("ageFilter").value;
+    const rankValue = document.getElementById("rankFilter").value;
+
     document.getElementById("teamAName").textContent = teamAName
     document.getElementById("teamBName").textContent = teamBName
     const listA = document.getElementById("teamAList")
@@ -42,36 +62,49 @@ function renderHome() {
     listA.innerHTML = ""
     listB.innerHTML = ""
     teamA.forEach(p => {
-        const li = document.createElement("li")
-        li.className = "player"
-        li.innerHTML = `
 
-<span onclick="goToPlayer('${p.username}')">${p.username}</span>
+        const matchesSearch = p.username.toLowerCase().includes(searchTerm);
+        const matchesAge = ageMatches(p.age, ageRange);
+        const matchesRank = (rankValue === "" || p.ranking === rankValue)
 
-<button onclick="removePlayer('A','${p.username}')">
-Remove
-</button>
-<button onclick="movePlayer('A','${p.username}')">
-Switch team
-</button>
+        if(matchesSearch && matchesAge && matchesRank){
+            const li = document.createElement("li")
+            li.className = "player"
+            li.innerHTML = `
 
-`
-        listA.appendChild(li)
+            <span onclick="goToPlayer('${p.username}')">${p.username}</span>
+
+            <button onclick="removePlayer('A','${p.username}')">
+            Remove
+            </button>
+            <button onclick="movePlayer('A','${p.username}')">
+            Switch team
+            </button>
+
+            `
+            listA.appendChild(li)
+        }
     })
     teamB.forEach(p => {
-        const li = document.createElement("li")
-        li.className = "player"
-        li.innerHTML = `
-<span onclick="goToPlayer('${p.username}')">${p.username}</span>
-<button onclick="removePlayer('B','${p.username}')">
-Remove
-</button>
-<button onclick="movePlayer('B','${p.username}')">
-Switch team
-</button>
+        const matchesSearch = p.username.toLowerCase().includes(searchTerm);
+        const matchesAge = ageMatches(p.age, ageRange);
+        const matchesRank = (rankValue === "" || p.ranking === rankValue)
 
-`
-        listB.appendChild(li)
+        if(matchesSearch && matchesAge && matchesRank){
+            const li = document.createElement("li")
+            li.className = "player"
+            li.innerHTML = `
+            <span onclick="goToPlayer('${p.username}')">${p.username}</span>
+            <button onclick="removePlayer('B','${p.username}')">
+            Remove
+            </button>
+            <button onclick="movePlayer('B','${p.username}')">
+            Switch team
+            </button>
+
+            `
+            listB.appendChild(li)
+        }
     })
 
 }
@@ -80,6 +113,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const searchInput = document.getElementById("searchInput")
     const searchBtn = document.getElementById("searchBtn")
+
+    const filterBtn = document.getElementById("filterBtn");
+    const ageFilter = document.getElementById("ageFilter");
+    const rankFilter = document.getElementById("rankFilter");
+
+    filterBtn.addEventListener("click", renderHome);
 
     function searchPlayers() {
 
@@ -95,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 player.style.display = "none"
             }
-
+            
         })
     }
 
