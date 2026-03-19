@@ -24,13 +24,14 @@
             <input id="editLastname" placeholder="Last name" required>
             <input id="editAge" type="number" placeholder="Age" required>
             <input id="editCountry" placeholder="Country" required>
-            <select id="editRanking">
+            <!-- <select id="editRanking">
                 <option>Iron</option>
                 <option>Bronze</option>
                 <option>Silver</option>
                 <option>Gold</option>
                 <option>Diamond</option>
-            </select>
+            </select> -->
+            <input type="number" min="1" max="100" placeholder="rank" id="editRanking">
             <br><br>
             <button type="button" id="saveChanges" onclick="saveEdit()">Save Changes</button>
             <button type="button" id="cancelChanges" onclick="toggleEdit(false)">Cancel</button>

@@ -21,6 +21,26 @@ function ageMatches(playerAge, range){
     return age >= min && age <= max;
 }
 
+function rankToNumber(rank) {
+
+    if(rank !=="" && !isNaN(rank))return parseInt(rank);
+
+    const map = {
+        Iron: 0,
+        Bronze: 20,
+        Silver: 40,
+        Gold: 60,
+        Diamond: 80
+    }
+    return map[rank] || 0
+}
+function numberToRank(num) {
+    if(num >=80) return "Diamond";
+    if(num >=60) return "Gold";
+    if(num >=40) return "Silver";
+    if(num >=20) return "Bronze";
+    return "Iron";
+}
 
 
 function save() {
@@ -65,7 +85,7 @@ function renderHome() {
 
         const matchesSearch = p.username.toLowerCase().includes(searchTerm);
         const matchesAge = ageMatches(p.age, ageRange);
-        const matchesRank = (rankValue === "" || p.ranking === rankValue)
+        const matchesRank = (rankValue === "" || numberToRank(p.ranking) === rankValue)
 
         if(matchesSearch && matchesAge && matchesRank){
             const li = document.createElement("li")
@@ -88,7 +108,7 @@ function renderHome() {
     teamB.forEach(p => {
         const matchesSearch = p.username.toLowerCase().includes(searchTerm);
         const matchesAge = ageMatches(p.age, ageRange);
-        const matchesRank = (rankValue === "" || p.ranking === rankValue)
+        const matchesRank = (rankValue === "" || numberToRank(p.ranking) === rankValue)
 
         if(matchesSearch && matchesAge && matchesRank){
             const li = document.createElement("li")
@@ -109,22 +129,15 @@ function renderHome() {
 updateTeamStats()
 }
 
-function rankToNumber(rank) {
-    const map = {
-        Iron: 1,
-        Bronze: 2,
-        Silver: 3,
-        Gold: 4,
-        Diamond: 5
-    }
-    return map[rank] || 0
-}
-function numberToRank(num) {
-    const ranks = ["Iron", "Bronze", "Silver", "Gold", "Diamond"]
-    return ranks[Math.round(num) - 1] || "-"
-}
+
 
 function updateTeamStats() {
+
+    const teamAStats = document.getElementById("teamAStats");
+    const teamBStats = document.getElementById("teamBStats");
+
+    if(!teamAStats || !teamBStats) return;
+    
 
     function calcStats(team) {
         const count = team.length
@@ -143,10 +156,10 @@ function updateTeamStats() {
     const statsA = calcStats(teamA)
     const statsB = calcStats(teamB)
 
-    document.getElementById("teamAStats").textContent =
+    teamAStats.textContent =
         `Players: ${statsA.count} | Avg Age: ${statsA.avgAge} | Avg Rank: ${numberToRank(statsA.avgRank)}`
 
-    document.getElementById("teamBStats").textContent =
+    teamBStats.textContent =
         `Players: ${statsB.count} | Avg Age: ${statsB.avgAge} | Avg Rank: ${numberToRank(statsB.avgRank)}`
 }
 
@@ -180,7 +193,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const ageFilter = document.getElementById("ageFilter");
     const rankFilter = document.getElementById("rankFilter");
 
-    filterBtn.addEventListener("click", renderHome);
+    if(filterBtn){
+        filterBtn.addEventListener("click", renderHome);
+    }
 
     function searchPlayers() {
 
@@ -199,14 +214,15 @@ document.addEventListener("DOMContentLoaded", function () {
             
         })
     }
-
-    searchBtn.addEventListener("click", searchPlayers)
-
-    searchInput.addEventListener("keyup", function(e) {
+    if(searchBtn && searchInput){
+        searchBtn.addEventListener("click", searchPlayers)
+        searchInput.addEventListener("keyup", function(e) {
         if (e.key === "Enter") {
             searchPlayers()
         }
     })
+}
+    
 
 })
 
@@ -329,7 +345,7 @@ function renderPlayerInfo() {
 <p><b>Name:</b> ${player?.firstname} ${player?.lastname}</p>
 <p><b>Age:</b> ${player?.age}</p>
 <p><b>Country:</b> ${player?.country}</p>
-<p><b>Ranking:</b> ${player?.ranking}</p>
+<p><b>Ranking:</b> ${numberToRank(player?.ranking)}</p>
 <br>
 <button onclick="window.location='index.html'">
 Back
@@ -353,7 +369,7 @@ function toggleEdit(show){
         document.getElementById("editLastname").value = player.lastname;
         document.getElementById("editAge").value = player.age;
         document.getElementById("editCountry").value = player.country;
-        document.getElementById("editRanking").value = player.ranking;
+        document.getElementById("editRanking").value = rankToNumber(player.ranking);
     }
 }
 
