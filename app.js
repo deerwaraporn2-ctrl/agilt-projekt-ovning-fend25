@@ -57,10 +57,28 @@ function renderHome() {
 
     document.getElementById("teamAName").textContent = teamAName
     document.getElementById("teamBName").textContent = teamBName
+
+    const teamACountEl = document.getElementById("teamACount")
+    const teamBCountEl = document.getElementById("teamBCount")
+
+    teamACountEl.innerHTML = `Players: ${teamA.length} <span class="team-info">(Max 7 players)</span>`
+
+    if (teamA.length < 3) {
+    teamACountEl.innerHTML += `<br><span class="team-warning">Min 3 players required!</span>`
+    }
+
+    teamBCountEl.innerHTML = `Players: ${teamB.length} <span class="team-info">(Max 7 players)</span>`
+
+    if (teamB.length < 3) {
+    teamBCountEl.innerHTML += `<br><span class="team-warning">Min 3 players required!</span>`
+    }
+
+
     const listA = document.getElementById("teamAList")
     const listB = document.getElementById("teamBList")
     listA.innerHTML = ""
     listB.innerHTML = ""
+    
     teamA.forEach(p => {
 
         const matchesSearch = p.username.toLowerCase().includes(searchTerm);
@@ -233,7 +251,7 @@ function movePlayer(fromTeam, username) {
         player = teamA.find(p => p.username === username);
 
         if(!player) return;
-        if(teamB.length >= 5) {
+        if(teamB.length >= 7) {
             alert(`${teamBName} is full!`);
             return;
         }
@@ -244,8 +262,8 @@ function movePlayer(fromTeam, username) {
         player = teamB.find(p => p.username === username);
 
         if(!player) return;
-        if(teamA.length >= 5) {
-            alert(`${teamBName} is full!`)
+        if(teamA.length >= 7) {
+            alert(`${teamAName} is full!`)
             return;
         }
         teamB = teamB.filter(p => p.username !== username);
@@ -272,11 +290,11 @@ function renderAddPlayer() {
     const teamSelect = document.getElementById("teamSelect")
 
     teamSelect.innerHTML = `
-    <option value="A" ${teamA.length >= 5 ? "disabled" : ""}>
+    <option value="A" ${teamA.length >= 7 ? "disabled" : ""}>
     ${teamAName}
     </option>
 
-    <option value="B" ${teamB.length >= 5 ? "disabled" : ""}>
+    <option value="B" ${teamB.length >= 7 ? "disabled" : ""}>
     ${teamBName}
     </option>
     `

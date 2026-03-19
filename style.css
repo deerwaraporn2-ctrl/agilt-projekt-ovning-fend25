@@ -38,3 +38,9 @@ nav a {
     border-radius: 10px;
     width: 300px;
 }
+
+.team-warning {
+  color: #6e6e6e;       
+  font-style: italic;
+  font-size: 0.9em; 
+}

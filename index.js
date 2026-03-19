@@ -15,11 +15,11 @@ function getSelectedTeam() {
 
 async function addPlayer() {
     const selectedTeam = getSelectedTeam()
-    if (selectedTeam === "A" && teamA.length >= 5) {
+    if (selectedTeam === "A" && teamA.length >= 7) {
         alert("Team A is full")
         return
     }
-    if (selectedTeam === "B" && teamB.length >= 5) {
+    if (selectedTeam === "B" && teamB.length >= 7) {
         alert("Team B is full")
         return
     }
@@ -49,14 +49,14 @@ function leaveTeam(team, index) {
 
 function changeTeam(team, index) {
     if (team === "A") {
-        if (teamB.length >= 5) {
+        if (teamB.length >= 7) {
             alert("Team B is full")
             return
         }
         const player = teamA.splice(index, 1)[0]
         teamB.push(player)
     } else {
-        if (teamA.length >= 5) {
+        if (teamA.length >= 7) {
             alert("Team A is full")
             return
         }
