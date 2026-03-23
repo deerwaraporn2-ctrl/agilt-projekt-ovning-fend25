@@ -96,18 +96,17 @@ function renderHome() {
     const teamACountEl = document.getElementById("teamACount")
     const teamBCountEl = document.getElementById("teamBCount")
 
-    teamACountEl.innerHTML = `Players: ${teamA.length} <span class="team-info">(Max 7 players)</span>`
+    teamACountEl.innerHTML = ""
 
     if (teamA.length < 3) {
-    teamACountEl.innerHTML += `<br><span class="team-warning">Min 3 players required!</span>`
+        teamACountEl.innerHTML = `<span class="team-warning">Min 3 players required!</span>`
     }
 
-    teamBCountEl.innerHTML = `Players: ${teamB.length} <span class="team-info">(Max 7 players)</span>`
+    teamBCountEl.innerHTML = ""
 
     if (teamB.length < 3) {
-    teamBCountEl.innerHTML += `<br><span class="team-warning">Min 3 players required!</span>`
+        teamBCountEl.innerHTML = `<span class="team-warning">Min 3 players required!</span>`
     }
-
 
     const listA = document.getElementById("teamAList")
     const listB = document.getElementById("teamBList")
@@ -310,7 +309,7 @@ function movePlayer(fromTeam, username) {
 
         if(!player) return;
         if(teamB.length >= 7) {
-            alert(`${teamBName} is full!`);
+            alert(`${teamBName} is full! Max 7 players.`);
             return;
         }
         teamA = teamA.filter(p => p.username !== username);
@@ -321,7 +320,7 @@ function movePlayer(fromTeam, username) {
 
         if(!player) return;
         if(teamA.length >= 7) {
-            alert(`${teamAName} is full!`)
+            alert(`${teamAName} is full! Max 7 players.`)
             return;
         }
         teamB = teamB.filter(p => p.username !== username);
