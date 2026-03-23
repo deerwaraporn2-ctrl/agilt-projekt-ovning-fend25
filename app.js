@@ -344,11 +344,33 @@ function renderAddPlayer() {
     document.getElementById("playerForm").addEventListener("submit", e => {
 
         e.preventDefault()
-        const username = document.getElementById("username").value
+
+        const username = document.getElementById("username").value.trim()
+        const age = Number(document.getElementById("age").value)
+        const ranking = document.getElementById("ranking").value
+        const errorEl = document.getElementById("error")
+
+        errorEl.textContent = ""
+
+        if (username.length < 3) {
+            errorEl.textContent = "Username must be at least 3 characters"
+            return
+        }
+
+        if (age < 13 || age > 50) {
+            errorEl.textContent = "Age must be between 13 and 50"
+            return
+        }
+
+        if (!ranking){
+            errorEl.textContent = "Ranking must be selected"
+            return
+        }
 
         if (usernameExists(username)) {
-            document.getElementById("error").textContent = "Username already exists";
-            return;
+            /* document.getElementById("error").textContent = "Username already exists"; */
+            errorEl.textContent = "Username already exists"
+            return
         }
         
         const countrySelect = document.getElementById("country");
