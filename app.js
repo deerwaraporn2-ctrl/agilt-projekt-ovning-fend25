@@ -7,6 +7,8 @@ let teamBName = localStorage.getItem("teamBName") || "Team B"
 const searchInput = document.getElementById("searchInput")
 const searchBtn = document.getElementById("searchBtn")
 
+const captainIcon = `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M200-160v-80h560v80H200Zm0-140-51-321q-2 0-4.5.5t-4.5.5q-25 0-42.5-17.5T80-680q0-25 17.5-42.5T140-740q25 0 42.5 17.5T200-680q0 7-1.5 13t-3.5 11l125 56 125-171q-11-8-18-21t-7-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820q0 15-7 28t-18 21l125 171 125-56q-2-5-3.5-11t-1.5-13q0-25 17.5-42.5T820-740q25 0 42.5 17.5T880-680q0 25-17.5 42.5T820-620q-2 0-4.5-.5t-4.5-.5l-51 321H200Zm68-80h424l26-167-105 46-133-183-133 183-105-46 26 167Zm212 0Z"/></svg>`
+
 function ageMatches(playerAge, range){
     if(!range || range === ""){
         return true;
@@ -19,6 +21,19 @@ function ageMatches(playerAge, range){
 
     const [min,max] = range.split("-").map(Number);
     return age >= min && age <= max;
+}
+
+function setCaptain(teamSide,username){
+    let selectedArray = (teamSide === 'A') ? teamA : teamB;
+
+    selectedArray.forEach(p=>{p.isCaptain = false})
+
+    const player = selectedArray.find(p=> p.username === username);
+    if(player){
+        player.isCaptain = true
+        save();
+        renderHome();
+    }
 }
 
 function rankToNumber(rank) {
@@ -110,8 +125,8 @@ function renderHome() {
             li.className = "player"
             li.innerHTML = `
 
-            <span onclick="goToPlayer('${p.username}')">${p.flag || ""} ${p.username}</span>
-
+            <span onclick="goToPlayer('${p.username}')">${p.flag || ""} ${p.username} ${p.isCaptain ?  captainIcon : ""}</span>
+            <button onclick="setCaptain('A', '${p.username}')">Make Captain</button>
             <button onclick="removePlayer('A','${p.username}')">
             Remove
             </button>
@@ -132,7 +147,8 @@ function renderHome() {
             const li = document.createElement("li")
             li.className = "player"
             li.innerHTML = `
-            <span onclick="goToPlayer('${p.username}')">${p.flag || ""} ${p.username}</span>
+            <span onclick="goToPlayer('${p.username}')">${p.flag || ""} ${p.username} ${p.isCaptain ?  captainIcon : ""}</span>
+            <button onclick="setCaptain('B', '${p.username}')">Make Captain</button>
             <button onclick="removePlayer('B','${p.username}')">
             Remove
             </button>
@@ -354,6 +370,16 @@ function renderAddPlayer() {
         const countrySelect = document.getElementById("country");
         const selectedOption = countrySelect.options[countrySelect.selectedIndex];
 
+        const team = document.getElementById("teamSelect").value;
+
+        let captainStatus = false;
+
+        if(team === "A" && teamA.length === 0){
+            captainStatus = true;
+        }else if(team === "B" && teamB.length === 0){
+            captainStatus = true;
+        }
+
         const player = {
             username,
             firstname: document.getElementById("firstname").value,
@@ -361,10 +387,9 @@ function renderAddPlayer() {
             age: document.getElementById("age").value,
             country: countrySelect.value,
             flag: selectedOption.textContent.split(" ")[0],
-            ranking: document.getElementById("ranking").value
-
+            ranking: document.getElementById("ranking").value,
+            isCaptain: captainStatus
         }
-        const team = document.getElementById("teamSelect").value
 
         if (team === "A") {
             teamA.push(player)
@@ -450,3 +475,5 @@ function saveEdit(){
         toggleEdit(false);
     }
 }
+
+
